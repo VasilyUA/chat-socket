@@ -14,7 +14,6 @@ app.use(express.json());
 app.use(cors("http://localhost:3000"));
 
 io.on("connection", (socket) => {
-  console.log(socket)
   socket.on("ROOM:JOIN", (data) => console.log(data));
   socket.emit("ROOM", { obj: "22222222222" });
   socket.on("COOL", (callback) => {

@@ -1,5 +1,7 @@
 import React, { useEffect } from "react";
 import socket from "./socket";
+// import Form from "./components/Form";
+// import Chat from "./components/Chat";
 
 export default function App() {
   useEffect(() => {
@@ -13,5 +15,9 @@ export default function App() {
     });
     socket.emit("COOL", data);
   }, []);
-  return <div className="App">TTTT </div>;
+  return (
+    <div className="wrapper">
+      
+    </div>
+  );
 }

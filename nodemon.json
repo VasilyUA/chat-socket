@@ -1,0 +1,10 @@
+{
+    "ignore": ["node_modules", "src",  ".git", "build"],
+    "env": {
+      "NODE_ENV": "development",
+      "PORT": 3001,
+      "URL": ""
+    },
+    "ext": ".js,.json",
+    "watch": ["server.js"]
+  }
