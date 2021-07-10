@@ -11,9 +11,12 @@ const schema = new Schema(
         password: {
             type: String,
             require: true,
-            select: false,
             set: value => getHash(value)
         },
+        online: {
+            type: Boolean,
+            default: false
+        }
     },
     {
         timestamps: true,

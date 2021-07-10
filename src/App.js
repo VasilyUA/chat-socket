@@ -1,23 +1,23 @@
-import React, { useEffect } from "react";
-import socket from "./socket";
-// import Form from "./components/Form";
-// import Chat from "./components/Chat";
+import React from "react";
+import {BrowserRouter as Routs, Route, Switch} from 'react-router-dom';
+import Error from "./components/Error";
+import Header from "./components/Header";
+import Form from "./components/Form";
+import Chat from "./components/Chat";
 
 export default function App() {
-  useEffect(() => {
-    socket.emit("ROOM:JOIN", { obj: "111111111" });
-    socket.on("ROOM", (data) => console.log(data));
-    const data = (data) => {
-      console.log(data);
-    };
-    socket.on("connect_error", (err) => {
-      console.log(`connect_error due to ${err.message}`);
-    });
-    socket.emit("COOL", data);
-  }, []);
-  return (
-    <div className="wrapper">
-      
-    </div>
-  );
+
+    return (
+        <Routs>
+            <Header/>
+            <main>
+                <Switch>
+                    <Route path="/" exact render={() => <Form title={'Login'}/>}/>
+                    <Route path="/registration" exact render={() => <Form title={'Registration'} />}/>
+                    <Route path="/chat-list" exact render={() => <Chat/>}/>
+                    <Route path="*" exact render={() => <Error/>}/>
+                </Switch>
+            </main>
+        </Routs>
+    );
 }

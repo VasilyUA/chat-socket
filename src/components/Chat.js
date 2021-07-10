@@ -1,34 +1,46 @@
-import React from 'react'
+import React, {useEffect, useState} from 'react'
+import socket from "../socket";
 
 export default function Chat() {
+    const [me, setMe] = useState({email: ""});
+    const [users, setUsers] = useState([]);
+    useEffect(() => {
+        socket.emit('join', data => setMe(data));
+    }, []);  // eslint-disable-line
+    useEffect(() => {
+        socket.emit('get_online_users', users => setUsers(users))
+    });
+
     return (
-        <div className="chat">
-        <div className="chat-users">
-          Комната: <b>6151919135491</b>
-          <hr />
-          <b>Онлайн 1:</b>
-          <ul>
-              <li>Name</li>
-          </ul>
-        </div>
-        <div className="chat-messages">
-          <div className="messages">
-              <div className="message">
-                <p>messages</p>
-                <div>
-                  <span>user name</span>
+        <div className="chat" style={{marginTop: '40px'}}>
+            <div className="chat-users">
+                Акаунт: <b>{me._id}</b>
+                <br/>
+                Логін: <b>{me.email}</b>
+                <hr/>
+                <b>Онлайн {users.length}:</b>
+                <ul>
+                    {users.length ? users.map(item => (<li key={item._id}>{item.email}</li>)) : <li>User not found</li>}
+                </ul>
+            </div>
+            <div className="chat-messages">
+                <div className="messages">
+                    <div className="message">
+                        <p>messages</p>
+                        <div>
+                            <span>user name</span>
+                        </div>
+                    </div>
                 </div>
-              </div>
-          </div>
-          <form>
+                <form>
             <textarea
-              className="form-control"
-              rows="3"></textarea>
-            <button type="button" className="btn btn-primary">
-              Отправить
-            </button>
-          </form>
+                className="form-control"
+                rows="3"/>
+                    <button type="button" className="btn btn-primary">
+                        Отправить
+                    </button>
+                </form>
+            </div>
         </div>
-      </div>
     )
 }

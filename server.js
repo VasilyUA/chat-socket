@@ -12,7 +12,8 @@ const port = process.env.PORT || 3001;
 app.use(express.json());
 app.use(cors("http://localhost:3000"));
 
-app.use('/api', require('./routers')(express.Router()));
+app.get('/', (req, res) => res.json({message: 'Server worked!'}));
+app.use('/', require('./routers')(express.Router()));
 
 const server = require("http").createServer(app);
 const io = require("socket.io")(server, {
@@ -20,18 +21,25 @@ const io = require("socket.io")(server, {
         origin: "http://localhost:3000",
     },
 });
-io.on("connection", (socket) => {
-    socket.on("ROOM:JOIN", (data) => console.log(data));
-    socket.emit("ROOM", {obj: "22222222222"});
-    socket.on("COOL", (callback) => {
-        callback("test0000000000000");
-    });
 
-    socket.on("disconnect", (reason) => {
-        console.log('reason', reason);
-    });
+require('./socket')(io);
+// error 404
+app.use((req, res, next) => {
+    const err = new Error("Not Found");
+    err.status = 404;
+    next(err);
 });
 
+// error handler
+// eslint-disable-next-line no-unused-vars
+app.use((error, req, res, next) => {
+    res.status(error.status || 500);
+    res.render("Erorr", {
+        message: error.message,
+        error: !config.IS_PRODUCTION ? error : {},
+    });
+})
+
 server.listen(port, (err) =>
-    err ? console.log(err) : console.log(`Сервер запущен ${port}!`)
+    err ? console.log(err) : console.log(`Сервер запущен: http://localhost:${port}!`)
 );
