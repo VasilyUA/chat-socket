@@ -44,3 +44,12 @@ exports.getUser = async (req, res) => {
         res.json({error: JSON.stringify(err, null, 5)});
     }
 }
+
+exports.userList = async (req, res) => {
+    try {
+        const users = await User.find({$and: [{_id: {$ne: req.user.id}}, {online: true}]}).lean();
+        res.json({users});
+    } catch (err) {
+        res.json({error: JSON.stringify(err, null, 5)});
+    }
+}

@@ -8,6 +8,7 @@
     "@testing-library/user-event": "^12.1.10",
     "axios": "^0.21.1",
     "bcryptjs": "^2.4.3",
+    "bluebird": "^3.7.2",
     "concurrently": "^6.2.0",
     "cors": "^2.8.5",
     "dotenv": "^10.0.0",
@@ -29,7 +30,8 @@
     "dev": "npm run server & npm run start",
     "build": "react-scripts build",
     "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "heroku-postbuild": "NPM_CONFIG_PRODUCTION=true npm install && npm run build"
   },
   "eslintConfig": {
     "extends": [
@@ -51,5 +53,6 @@
   },
   "devDependencies": {
     "nodemon": "^2.0.9"
-  }
+  },
+  "proxy": "http://localhost:3001"
 }
