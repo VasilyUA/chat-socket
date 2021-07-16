@@ -4,7 +4,7 @@
       "NODE_ENV": "development",
       "JWT_SECRET_USER": "456sdf4g4f5f4fg41g45f56sasdf211df196621sdgyhjmklgg45656sd4564fdsasdf",
       "PORT": 3001,
-      "MONGO_URL": "mongodb://localhost/StartProject",
+      "MONGO_URL": "mongodb://localhost/chats",
       "URL": ""
     },
     "ext": ".js,.json",

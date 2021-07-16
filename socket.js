@@ -1,6 +1,9 @@
+const Promise = require('bluebird');
+const _ = require('lodash');
 const {isLoggedSocket} = require('./middleware/checkAuth');
-const _ = require('lodash')
-const User = require('./mongodb/models/user')
+const User = require('./mongodb/models/user');
+const Chat = require('./mongodb/models/chat');
+const Message = require('./mongodb/models/messages');
 
 const createRequest = socket => {
     return {
@@ -17,14 +20,68 @@ module.exports = io => {
             callback(socket.user);
             socket.user.online = true;
             socket.user.save();
-            const users = await User.find({$and: [{_id: {$ne: socket.user.id}}, {online: true}]}).lean();
-            console.log('My_value', socket);
+            socket.broadcast.emit('get_online_users', socket.user);
+        });
+
+        socket.on('creat:chat', async (fromUserId, toUserId, collback) => {
+            const body = {peers: [fromUserId, toUserId]};
+            let chat = await Chat.findOne({peers: {$in: [fromUserId, toUserId]}});
+            if (chat) {
+                chat = await Chat.populate(chat, {
+                    path: 'messages',
+                    model: 'message',
+                    populate: {
+                        path: 'user',
+                        model: 'user',
+                        select: 'email'
+                    },
+                });
+            } else {
+                chat = await Chat.create(body);
+                const {email = ''} = await User.findById(toUserId);
+                await Message.create({message: `Hi ${email}!`, chatId: chat._id, userId: socket.user.id});
+            }
+            collback(chat);
+        });
+
+        socket.on('creat:message', async (object, collback) => {
+            await Message.create(object);
+            const chat = await Chat.findById(object.chatId).populate({
+                path: 'messages',
+                model: 'message',
+                populate: {
+                    path: 'user',
+                    model: 'user',
+                    select: 'email'
+                },
+            });
+
+            Promise.each(chat.peers, async peer => {
+                if (peer !== socket.user.id) {
+                    io.to(peer).emit('new message', chat);
+                }
+            });
+            collback(chat)
+        });
+
+        socket.on('get:chat', async (chatId, collback) => {
+            if (!chatId) return collback({});
+            const chat = await Chat.findById(chatId).populate({
+                path: 'messages',
+                model: 'message',
+                populate: {
+                    path: 'user',
+                    model: 'user',
+                    select: 'email'
+                },
+            });
+            collback(chat)
         });
 
         socket.on("disconnect", async reason => {
             if (!socket.user) return;
             await User.updateOne({_id: socket.user.id}, {online: false});
-
+            socket.broadcast.emit('get_offline_users', socket.user._id);
         });
     });
     return io;

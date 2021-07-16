@@ -1,8 +1,9 @@
-const {Schema, model} = require("mongoose");
+const mongoose = require("mongoose");
 const getHash = require("../../helpers/hash");
 
-const schema = new Schema(
+const schema = new mongoose.Schema(
     {
+        _id: {type: mongoose.Types.ObjectId, auto: true},
         email: {
             type: String,
             require: true,
@@ -19,12 +20,14 @@ const schema = new Schema(
         }
     },
     {
-        timestamps: true,
-    }
+        timestamps: {},
+    },
+    {
+        autoIndex: false,
+    },
 );
 
-schema.set("toJSON", {
-    virtuals: true,
-});
+schema.set('toObject', { virtuals: true });
+schema.set('toJSON', { virtuals: true });
 
-module.exports = model("user", schema);
+module.exports = mongoose.model("user", schema);

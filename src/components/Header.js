@@ -1,7 +1,7 @@
 import React from 'react';
 import {NavLink} from 'react-router-dom';
 
-export default function Header(props) {
+export default function Header() {
     const handlerClick = () => {
         sessionStorage.removeItem('token');
         window.location.href = '/';
