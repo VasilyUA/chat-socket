@@ -30,7 +30,6 @@ exports.isLoggedSocket = async (req, res, next) => {
         if (!req.user) return;
         if (req.socketIo && !req.socketIo.user) {
             req.socketIo.user = req.user;
-            req.socketIo.strategy = req.strategy;
         }
         return next();
     });

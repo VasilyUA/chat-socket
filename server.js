@@ -17,6 +17,10 @@ app.use('/', require('./routers')(express.Router()));
 
 const server = require("http").createServer(app);
 const io = require("socket.io")(server, {
+    serveClient: false,
+    pingInterval: 10000,
+    pingTimeout: 5000,
+    cookie: false,
     cors: {
         origin: "http://localhost:3000",
     },

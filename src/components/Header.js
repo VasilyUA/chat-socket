@@ -3,11 +3,10 @@ import {NavLink} from 'react-router-dom';
 
 export default function Header(props) {
     const handlerClick = () => {
-        localStorage.removeItem('token');
-        localStorage.removeItem('user');
+        sessionStorage.removeItem('token');
         window.location.href = '/';
     }
-    let token = localStorage.getItem('token');
+    let token = sessionStorage.getItem('token');
 
     return <nav className="navbar navbar-expand-lg navbar-dark bg-dark">
         <div className="container-fluid">

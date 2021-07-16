@@ -9,14 +9,14 @@ export default function Form({title = 'Login'}) {
     const history = useHistory();
 
     useEffect(()=> {
-        if (localStorage.getItem('token')) history.push('/chat-list');
+        if (sessionStorage.getItem('token')) history.push('/chat-list');
     })
 
     const onSubmit = async e => {
         e.preventDefault();
         try {
             const result = await axios.post(`http://localhost:3001/${title.toLowerCase()}`, state);
-            localStorage.setItem('token', _.get(result, 'data.token'));
+            sessionStorage.setItem('token', _.get(result, 'data.token'));
            window.location.href = '/chat-list';
         } catch (err) {
             setErr(JSON.stringify(err, null, 5));

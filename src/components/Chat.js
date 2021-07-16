@@ -5,11 +5,11 @@ export default function Chat() {
     const [me, setMe] = useState({email: ""});
     const [users, setUsers] = useState([]);
     useEffect(() => {
-        socket.emit('join', data => setMe(data));
+        socket.emit('join', data => { setMe(data); });
+        socket.on('get_online_users', users => {
+            setUsers(users);
+        })
     }, []);  // eslint-disable-line
-    useEffect(() => {
-        socket.emit('get_online_users', users => setUsers(users))
-    });
 
     return (
         <div className="chat" style={{marginTop: '40px'}}>

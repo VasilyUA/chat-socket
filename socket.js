@@ -15,12 +15,10 @@ module.exports = io => {
             if (!socket.user) return;
             socket.join(socket.user.id);
             callback(socket.user);
-        });
-
-        socket.on('get_online_users', async (callback) => {
-            await User.updateOne({_id: socket.user.id}, {online: true});
+            socket.user.online = true;
+            socket.user.save();
             const users = await User.find({$and: [{_id: {$ne: socket.user.id}}, {online: true}]}).lean();
-            callback(users)
+            console.log('My_value', socket);
         });
 
         socket.on("disconnect", async reason => {
