@@ -3,9 +3,8 @@
 	"env": {
 		"NODE_ENV": "development",
 		"JWT_SECRET_USER": "456sdf4g4f5f4fg41g45f56sasdf211df196621sdgyhjmklgg45656sd4564fdsasdf",
-		"PORT": 5000,
-		"MONGO_URL": "mongodb://localhost/chats",
-		"CORS_URL": "http://localhost:3000,https://chat-soket.herokuapp.com"
+		"MONGO_URL": "mongodb://127.0.0.1:27017/chat?directConnection=true&replicaSet=rsmongo",
+		"CORS_URL": "http://localhost:3000,http://localhost:3001,https://chat-soket.herokuapp.com"
 	},
 	"ext": ".js,.json",
 	"watch": ["./"]
